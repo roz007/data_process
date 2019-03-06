@@ -90,77 +90,77 @@ def mrp_norm(obj, total):
 
 
 #Extracting the first set of data
-data_alpha = []
+DATA_ALPHA = []
 with gzip.open("t.json.gz", "rt", encoding="utf-8") as data:
     for line in data:
-        data_alpha.append(json.loads(line))
+        DATA_ALPHA.append(json.loads(line))
 
 #Extracting second set of data    
-data_beta = []
+DATA_BETA = []
 with gzip.open("y.json.gz", "rt", encoding="utf-8") as data:
     for line in data:
-        data_beta.append(json.loads(line))
+        DATA_BETA.append(json.loads(line))
 
 #extracting urlh from the dictionary and into a list
-alpha_urlh_list = urlh_list(data_alpha)
-BETA_URLH_LIST = urlh_list(data_beta)
+ALPHA_URLH_LIST = urlh_list(DATA_ALPHA)
+BETA_URLH_LIST = urlh_list(DATA_BETA)
 
 #removing duplicate instances of urlhs
-D = clean_data(alpha_urlh_list)
-alpha_urlh_list = D
+D = clean_data(ALPHA_URLH_LIST)
+ALPHA_URLH_LIST = D
 
 #removing duplicate instances of urlhs
 E = clean_data(BETA_URLH_LIST)
 BETA_URLH_LIST = E
 
-all_data_urlh_list = alpha_urlh_list+BETA_URLH_LIST
-urlh_overlap = count_overlap(all_data_urlh_list)
+ALL_DATA_URLH_LIST = ALPHA_URLH_LIST+BETA_URLH_LIST
+URLH_OVERLAP = count_overlap(ALL_DATA_URLH_LIST)
 print("Number of overlapping urls")
-print(len(urlh_overlap))
+print(len(URLH_OVERLAP))
 
 
 
 #unique categories
-cat_list_alpha = category_list(data_alpha)
-cat_list_beta = category_list(data_beta)
+CAT_LIST_ALPHA = category_list(DATA_ALPHA)
+CAT_LIST_BETA = category_list(DATA_BETA)
 
-count_alpha_category = cat_unique_count(cat_list_alpha)
-count_beta_category = cat_unique_count(cat_list_beta)
+COUNT_ALPHA_CATEGORY = cat_unique_count(CAT_LIST_ALPHA)
+COUNT_BETA_CATEGORY = cat_unique_count(CAT_LIST_BETA)
 print("unique categories in alpha files")
-print(count_alpha_category)
+print(COUNT_ALPHA_CATEGORY)
 print("unique categories in beta files")
-print(count_beta_category)
+print(COUNT_BETA_CATEGORY)
 
 #list of non overlapping categories
-full_category = cat_list_alpha+cat_list_beta
-t1 = non_lapping(full_category)
-if len(t1) == 0:
+FULL_CATEGORY = CAT_LIST_ALPHA+CAT_LIST_BETA
+T1 = non_lapping(FULL_CATEGORY)
+if len(T1) == 0:
     print("All categories overlap")
 else:
     print("These are the categories")
-    print(t1)
+    print(T1)
 
 #taxonomy
 TAX = []
-TAX = tax_list(data_alpha, TAX)
-TAX = tax_list(data_beta, TAX)
-tax_unique_list = []
+TAX = tax_list(DATA_ALPHA, TAX)
+TAX = tax_list(DATA_BETA, TAX)
+TAX_UNIQUE_LIST = []
 for [a, b] in TAX:
-    if [a, b] not in tax_unique_list:
-        tax_unique_list.append([a, b])
+    if [a, b] not in TAX_UNIQUE_LIST:
+        TAX_UNIQUE_LIST.append([a, b])
 
-for [a, b] in tax_unique_list:
+for [a, b] in TAX_UNIQUE_LIST:
     print(a+" > "+ b + ": {}".format(TAX.count([a,b])))
 
 #normaliztion of mrp
 TOTAL_MRP = []
-TOTAL_MRP = mrp_norm(data_alpha, TOTAL_MRP)
-TOTAL_MRP = mrp_norm(data_beta, TOTAL_MRP)
+TOTAL_MRP = mrp_norm(DATA_ALPHA, TOTAL_MRP)
+TOTAL_MRP = mrp_norm(DATA_BETA, TOTAL_MRP)
 
-net_mrp = 0
+NET_MRP = 0
 for unit in TOTAL_MRP:
     if unit != 'NA':
-        net_mrp += unit
+        NET_MRP += unit
     
 for j,unit in enumerate(TOTAL_MRP):
     if unit !='NA':
@@ -173,8 +173,8 @@ for unit in TOTAL_MRP:
 file.close()
 
 #calculating price difference
-URL_ALPHA_DICT = price_dict(data_alpha, urlh_overlap)
-URL_BETA_DICT = price_dict(data_beta, urlh_overlap)
+URL_ALPHA_DICT = price_dict(DATA_ALPHA, URLH_OVERLAP)
+URL_BETA_DICT = price_dict(DATA_BETA, URLH_OVERLAP)
 
 for item in URL_ALPHA_DICT:
     if item in URL_BETA_DICT:
